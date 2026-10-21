@@ -25,7 +25,7 @@ describe('POST /vacancies', () => {
     const response = await request(app).post('/vacancies').send({ company: 'Tech Andes' });
 
     expect(response.status).toBe(400);
-    expect(response.body.error).toBe('El título, la empresa y la modalidad son obligatorios');
+    expect(response.body.error).toBe('El titulo, la empresa y la modalidad son obligatorios');
   });
 
   it('responds with 400 when salary is not a positive number', async () => {
