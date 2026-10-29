@@ -10,6 +10,11 @@ import { errorHandler, notFoundHandler } from "./shared/httpErrorHandlers";
 import { PostgresVacancyRepository } from "./modules/vacancies/adapters/persistence/PostgresVacancyRepository";
 import { VacancyRepository } from "./modules/vacancies/ports/VacancyRepository";
 import { createPostgresPool } from  "./shared/database/postgresPool";
+import { createCompanyRouter } from "./modules/companies/adapters/http/companyRoutes";
+import { InMemoryCompanyRepository } from "./modules/companies/adapters/persistence/InMemoryCompanyRepository";
+import { CompanyService } from "./modules/companies/application/CompanyService";
+import { CompanyRepository } from "./modules/companies/ports/CompanyRepository";
+
 
 const app = express();
 
@@ -24,13 +29,15 @@ const sampleVacancies = [
 const vacancyRepository: VacancyRepository = process.env.DATABASE_URL
 ? new PostgresVacancyRepository(createPostgresPool(process.env.DATABASE_URL))
 : new InMemoryVacancyRepository(sampleVacancies);
+console.log(`Vacancies persistences: ${process.env.DATABASE_URL ? 'PostgresSQ' : 'In memory'}`);
 
 //2) Servicio (caso de uso)
 const vacancyService = new VacancyService(vacancyRepository);
+const companyRepository = new CompanyService(new InMemoryCompanyRepository());
 
 //3) Rutas: se le entrega el servicio y se monta bajo el prefijo / vacancies
 app.use('/vacancies', createVacancyRouter(vacancyService));
-
+app.use('/companies', createCompanyRouter(companyRepository));
 // --- Módulo Candidates (misma estructura hexagonal que Vacancies) ---
 
 //1) Repositorio donde se guardan los candidatos
