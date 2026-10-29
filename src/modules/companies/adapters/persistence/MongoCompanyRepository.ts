@@ -1,4 +1,4 @@
-import { MongoClient, WithId } from "mongodb";
+import { MongoClient,ObjectId, WithId } from "mongodb";
 
 import { Company, NewCompany } from "../../domain/Company";
 import { CompanyRepository } from "../../ports/CompanyRepository";
@@ -6,11 +6,10 @@ import { CompanyRepository } from "../../ports/CompanyRepository";
 // objetcId valido:24 caracteres hexadecimales
 const OBJECT_ID_PATTERN = /^[0-9a-f]{24}$/i;
 
-// Mapeo: 
-const toCompany = ({_id, ...data}: WithId<NewCompany>): Company =>({id:_id.toHexString(), ...data});
+// Mapeo - onvierte un documento de Mongo en una Company del domain
+const toCompany = ({_id, ...data}: WithId<NewCompany>): Company =>({id: _id.toHexString(), ...data});
 
 // Adaptador de salida - cunmple el mismo contrato que el repositorio de memoria
-
 export class MongoCompanyRepository implements CompanyRepository{
 
     // la colecion de "companies"
@@ -25,17 +24,17 @@ export class MongoCompanyRepository implements CompanyRepository{
         const documents = await this.collection.find().toArray();
         return documents.map(toCompany);
     }
-    findById= async (id: string) : Promise<Company | undefined> =>{
+    findById = async (id: string) : Promise<Company | undefined> =>{
         if (!OBJECT_ID_PATTERN.test(id)){
             return undefined;
         }
-        const document = await this.collection.findOne({_id: new Object(id)});
+        const document = await this.collection.findOne({_id: new ObjectId(id)});
         return document ? toCompany(document): undefined;
     }
 
-    save= async (newCompany: NewCompany) : Promise<Company> =>{
+    save = async (newCompany: NewCompany) : Promise<Company> =>{
         const result = await this.collection.insertOne({...newCompany});
         return{id: result.insertedId.toHexString(), ...newCompany};
-    } 
+    }; 
 
 }
