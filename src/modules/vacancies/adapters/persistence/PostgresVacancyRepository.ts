@@ -10,7 +10,7 @@ type VacancyRow ={
     id: number;
     title: string;
     company: string;
-    modality: string
+    modality: string;
     salary: string;
 }
 // Columnas solicitadas en cada consulta
