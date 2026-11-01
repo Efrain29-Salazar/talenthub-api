@@ -1,7 +1,7 @@
 import { InMemoryCandidateRepository } from './InMemoryCandidateRepository';
 
 // Datos de ejemplo (datos de prueba en español).
-const sampleCandidate = { name: 'María Pérez', email: 'maria@correo.com', city: 'Quito', experienceYears: 3 };
+const sampleCandidate = { name: 'María Pérez', email: 'maria@correo.com', city: 'Quito', experienceYears: 3, skills: ['TypeScript', 'SQL'] };
 
 describe('InMemoryCandidateRepository', () => {
   it('starts empty when no initial candidates are given', async () => {

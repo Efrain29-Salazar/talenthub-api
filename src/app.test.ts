@@ -129,7 +129,7 @@ describe('DELETE /vacancies/:id', () => {
 // ---------- Módulo Candidates ----------
 
 // Datos válidos de ejemplo (datos de prueba en español).
-const validCandidate = { name: 'Ana Torres', email: 'ana.torres@correo.com', city: 'Cuenca', experienceYears: 2 };
+const validCandidate = { name: 'Ana Torres', email: 'ana.torres@correo.com', city: 'Cuenca', experienceYears: 2, skills: ['React', 'Node.js'] };
 
 // Crea un candidato por HTTP y devuelve la respuesta (para obtener su id en las pruebas siguientes).
 const createCandidate = async () => request(app).post('/candidates').send(validCandidate);
@@ -175,6 +175,23 @@ describe('POST /candidates', () => {
     expect(response.status).toBe(201);
     expect(response.body).toMatchObject(validCandidate);
     expect(response.body.id).toBeDefined();
+  });
+
+  it('keeps the skills and uses an empty list when they are not sent', async () => {
+    const { skills, ...withoutSkills } = validCandidate;
+
+    const withSkills = await request(app).post('/candidates').send(validCandidate);
+    const defaultSkills = await request(app).post('/candidates').send(withoutSkills);
+
+    expect(withSkills.body.skills).toEqual(['React', 'Node.js']);
+    expect(defaultSkills.body.skills).toEqual([]);
+  });
+
+  it('responds with 400 when skills is not a list of texts', async () => {
+    const response = await request(app).post('/candidates').send({ ...validCandidate, skills: 'React' });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Las habilidades deben ser una lista de textos');
   });
 
   it('responds with 400 when the data breaks a business rule', async () => {

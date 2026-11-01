@@ -51,8 +51,8 @@ app.use('/companies', createCompanyRouter(companyService));
 
 //1) Repositorio donde se guardan los candidatos
 const candidateRepository = new InMemoryCandidateRepository([
-    {id: 1, name: 'María Pérez', email: 'maria.perez@correo.com', city: 'Quito', experienceYears: 3},
-    {id: 2, name: 'Carlos Andrade', email: 'carlos.andrade@correo.com', city: 'Guayaquil', experienceYears: 5},
+    {id: 1, name: 'María Pérez', email: 'maria.perez@correo.com', city: 'Quito', experienceYears: 3, skills: ['TypeScript', 'SQL']},
+    {id: 2, name: 'Carlos Andrade', email: 'carlos.andrade@correo.com', city: 'Guayaquil', experienceYears: 5, skills: ['Java', 'Docker']},
 ]);
 
 //2) Servicio (casos de uso)
