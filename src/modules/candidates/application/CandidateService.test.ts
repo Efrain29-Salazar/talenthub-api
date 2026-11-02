@@ -6,7 +6,7 @@ import { InMemoryCandidateRepository } from '../adapters/persistence/InMemoryCan
 import { CandidateService } from './CandidateService';
 
 // Datos de ejemplo válidos (datos de prueba en español).
-const validInput = { name: 'María Pérez', email: 'maria@correo.com', city: 'Quito', experienceYears: 3 };
+const validInput = { name: 'María Pérez', email: 'maria@correo.com', city: 'Quito', experienceYears: 3, skills: ['TypeScript', 'SQL'] };
 
 // Crea un servicio nuevo con un repositorio vacío, para que cada prueba parta de cero.
 const createService = (): CandidateService => new CandidateService(new InMemoryCandidateRepository());
