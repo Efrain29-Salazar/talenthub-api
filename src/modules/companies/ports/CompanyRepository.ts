@@ -1,7 +1,7 @@
 import { Company, NewCompany } from "../domain/Company"
 
 export interface CompanyRepository {
-    finAll:()=> Promise<Company[]>;
+    findAll:()=> Promise<Company[]>;
 
     findById: (id: string) => Promise<Company | undefined>;
 

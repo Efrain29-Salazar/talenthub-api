@@ -61,3 +61,23 @@ model Vacancy {
 
   @@map("vacancies")
 }
+
+// MODEL Candidate: la tabla "candidates". No tiene relaciones: es una tabla independiente.
+model Candidate {
+  // Número entero que sube solo (1, 2, 3...), igual que en Vacancy.
+  id              Int      @id @default(autoincrement())
+
+  name            String   @db.VarChar(150)
+
+  email           String   @db.VarChar(150)
+
+  city            String   @db.VarChar(100)
+
+  // Años de experiencia (admite decimales, por eso Decimal). "@map" da el nombre de la columna.
+  experienceYears Decimal  @db.Decimal(5, 2) @map("experience_years")
+
+  // Lista de habilidades: PostgreSQL guarda arreglos de verdad. Por defecto, una lista vacía.
+  skills          String[] @default([])
+
+  @@map("candidates")
+}

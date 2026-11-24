@@ -5,7 +5,7 @@ export class InMemoryCompanyRepository implements CompanyRepository{
     private companies: Company[] = [];
     private nextId = 1;
 
-    finAll= async (): Promise<Company[]> => structuredClone (this.companies);
+    findAll= async (): Promise<Company[]> => structuredClone (this.companies);
 
     findById = async (id: string): Promise<Company | undefined> =>{
         const company = this.companies.find((item) => item.id === id);

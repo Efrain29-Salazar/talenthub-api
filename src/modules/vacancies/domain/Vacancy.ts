@@ -4,21 +4,22 @@ import { DomainError } from "../../../shared/DomainError";
  export interface Vacancy{
     id:number;
     title: string;
-    company: string;
+    companyId: string; // clave foranea a la tabla de companias
     modality: string;
     salary: number;
+    companyName?: string; // JOIN
 
 }
 
-// Datos que se espera recicibir desde el cliente
-export type NewVacancy = Omit <Vacancy, 'id'>;
+// Una nueva vacante: Datos que se espera recibir desde el cliente
+export type NewVacancy = Omit <Vacancy, 'id' | 'companyName'>;
 
 export const parseNewVacancy = (input: unknown): NewVacancy =>{
-    const {title, company, modality, salary} = (input ?? {}) as Record<string, unknown>;
+    const {title, companyId, modality, salary} = (input ?? {}) as Record<string, unknown>;
 
     // Regla 1
     if (typeof title !== 'string' || !title.trim() ||
-      typeof company !== 'string' || !company.trim() ||
+      typeof companyId !== 'string' || !companyId.trim() ||
       typeof modality !== 'string' || !modality.trim()) {
         throw new DomainError('El titulo, la empresa y la modalidad son obligatorios');
 
@@ -29,7 +30,7 @@ export const parseNewVacancy = (input: unknown): NewVacancy =>{
   }
   // Devuelve datos Limpios
 
-  return {title: title.trim(), company: company.trim(), modality:modality.trim(), salary: salary};
+  return {title: title.trim(), companyId: companyId.trim(), modality:modality.trim(), salary: salary};
   
 
-}
+};

@@ -20,7 +20,7 @@ export class MongoCompanyRepository implements CompanyRepository{
 
     }
 
-    finAll = async () : Promise<Company[]> =>{
+    findAll = async () : Promise<Company[]> =>{
         const documents = await this.collection.find().toArray();
         return documents.map(toCompany);
     }

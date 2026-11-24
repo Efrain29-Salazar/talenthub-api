@@ -41,7 +41,7 @@ describe('MongoCompanyRepository', () => {
   });
 
   it('starts empty', async () => {
-    expect(await repository.finAll()).toEqual([]);
+    expect(await repository.findAll()).toEqual([]);
   });
 
   it('saves a company with its flexible data and assigns a text id', async () => {
@@ -55,7 +55,7 @@ describe('MongoCompanyRepository', () => {
   it('lists what was saved', async () => {
     const saved = await repository.save(sampleCompany);
 
-    expect(await repository.finAll()).toEqual([saved]);
+    expect(await repository.findAll()).toEqual([saved]);
   });
 
   it('finds a company by id', async () => {

@@ -3,17 +3,17 @@ import { parseNewVacancy } from "./Vacancy";
 
 describe('parseNewVacancy', () =>{
     it('returns the vacancy data trimmed', ()=>{
-        const result = parseNewVacancy ({title: 'QA Tester', company: 'Tech Andes', modality: 'remoto', salary: 800});
+        const result = parseNewVacancy ({title: 'QA Tester', companyId: 'empresa-1', modality: 'remoto', salary: 800});
 
-        expect(result).toEqual({title: 'QA Tester', company: 'Tech Andes', modality: 'remoto', salary: 800});
+        expect(result).toEqual({title: 'QA Tester', companyId: 'empresa-1', modality: 'remoto', salary: 800});
     });
 
     it ('throws when a required field is missing', () =>{
-        expect (() => parseNewVacancy({company: 'Tech'})).toThrow(DomainError);
+        expect (() => parseNewVacancy({companyId: 'Tech'})).toThrow(DomainError);
     });
     
     it ('throws when a salary is not a positive number', () =>{
-        expect (() => parseNewVacancy({title: 'QA', company: 'Tech', modality: 'remoto', salary: 0})).toThrow(DomainError);
+        expect (() => parseNewVacancy({title: 'QA', companyId: 'empresa-1', modality: 'remoto', salary: 0})).toThrow(DomainError);
     });
 
 })

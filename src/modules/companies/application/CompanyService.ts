@@ -7,7 +7,7 @@ const COMPANY_NOT_FOUND_MESSAGE ='Empresa no encontrada';
 export class CompanyService{
     constructor(private readonly repository: CompanyRepository){}
 
-    list = async () : Promise<Company[]> => this.repository.finAll();
+    list = async () : Promise<Company[]> => this.repository.findAll();
 
     getById = async (id: string): Promise<Company> =>{
         const company = await this.repository.findById(id);
