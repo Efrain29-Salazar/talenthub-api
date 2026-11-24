@@ -5,7 +5,7 @@ import request from 'supertest';
 import app from './app';
 
 // Datos válidos de ejemplo (datos de prueba en español).
-const validPayload = { title: 'QA Tester', company: 'Tech Andes', modality: 'presencial', salary: 800 };
+const validPayload = { title: 'QA Tester', companyId: 'empresa-1', modality: 'presencial', salary: 800 };
 
 // Crea una vacante por HTTP y devuelve la respuesta (para obtener su id en las pruebas siguientes).
 const createVacancy = async () => request(app).post('/vacancies').send(validPayload);
@@ -33,7 +33,7 @@ describe('POST /vacancies', () => {
 
   it('responds with 400 when required fields are missing', async () => {
     // Envía solo la empresa: faltan título y modalidad.
-    const response = await request(app).post('/vacancies').send({ company: 'Tech Andes' });
+    const response = await request(app).post('/vacancies').send({ companyId: 'empresa-1' });
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('El titulo, la empresa y la modalidad son obligatorios');
@@ -250,3 +250,31 @@ describe('unknown routes', () => {
     expect(response.body.error).toBe('Ruta no encontrada');
   });
 });
+
+describe('CORS', () => {
+  // El origen permitido: el mismo valor que usa app.ts.
+  const allowedOrigin = process.env.CORS_ORIGIN ?? 'http://localhost:5173';
+
+  it('allows the frontend origin to read the responses', async () => {
+    const response = await request(app).get('/vacancies').set('Origin', allowedOrigin);
+
+    expect(response.headers['access-control-allow-origin']).toBe(allowedOrigin);
+  });	
+
+  it('does not authorize any other origin', async () => {
+    const response = await request(app).get('/vacancies').set('Origin', 'http://otro-sitio.com');
+
+    expect(response.headers['access-control-allow-origin']).not.toBe('http://otro-sitio.com');
+  });
+
+  it('answers the preflight request (OPTIONS) before a POST', async () => {
+    const response = await request(app)
+      .options('/vacancies')
+      .set('Origin', allowedOrigin)
+      .set('Access-Control-Request-Method', 'POST');
+
+    expect(response.status).toBe(204);
+    expect(response.headers['access-control-allow-methods']).toContain('POST');
+  });
+});
+
